@@ -1,8 +1,8 @@
 specVersion: 0.0.4
 description: NEAR Blocks
-repository: https://github.com/VitalPointAI/graph-near-blocks.git
+repository: https://github.com/graphprotocol/example-subgraph/tree/near-blocks-example
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: near
     name: blocks
@@ -12,7 +12,7 @@ dataSources:
     mapping:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mapping.ts
+      file: blocks/blocks.wasm
       entities:
         - BlockEvent
       blockHandlers:

@@ -1,22 +1,13 @@
-import { NewGravatar, UpdatedGravatar } from '../generated/Gravity/Gravity'
-import { Gravatar } from '../generated/schema'
+import { near, BigInt } from "@graphprotocol/graph-ts";
+import { BlockEvent } from "../generated/schema";
 
-export function handleNewGravatar(event: NewGravatar): void {
-  let gravatar = new Gravatar(event.params.id.toHex())
-  gravatar.owner = event.params.owner
-  gravatar.displayName = event.params.displayName
-  gravatar.imageUrl = event.params.imageUrl
-  gravatar.save()
-}
+export function handleBlock(block: near.Block): void {
+  const header = block.header;
+  let event = new BlockEvent(header.hash.toHexString());
+  event.number = BigInt.fromI32(header.height as i32);
+  event.hash = header.hash;
+  //event.timestampNanosec = BigInt.fromU64(header.timestampNanosec);
+  event.gasPrice = header.gasPrice;
 
-export function handleUpdatedGravatar(event: UpdatedGravatar): void {
-  let id = event.params.id.toHex()
-  let gravatar = Gravatar.load(id)
-  if (gravatar == null) {
-    gravatar = new Gravatar(id)
-  }
-  gravatar.owner = event.params.owner
-  gravatar.displayName = event.params.displayName
-  gravatar.imageUrl = event.params.imageUrl
-  gravatar.save()
+  event.save();
 }
